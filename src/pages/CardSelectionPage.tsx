@@ -7,7 +7,7 @@ import TarotCard from '@/components/TarotCard';
 import { tarotCards } from '@/data/tarotCards';
 import { useTarot, ReadingType } from '@/contexts/TarotContext';
 import { toast } from "@/components/ui/use-toast";
-import { calculateFanPosition, calculateCardSize } from '@/utils/DeckUtils';
+import { calculateFanPosition, calculateCardSize, generateSelectionAnimation } from '@/utils/DeckUtils';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
@@ -24,6 +24,7 @@ const CardSelectionPage = () => {
   const [cards, setCards] = useState([...tarotCards]);
   const [isShuffling, setIsShuffling] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [flippingCardId, setFlippingCardId] = useState<number | null>(null);
   const isMobile = useIsMobile();
   
   const tarotContext = useTarot();
@@ -75,12 +76,19 @@ const CardSelectionPage = () => {
     }
     
     if (tarotContext.selectedCards.length < maxCards) {
-      tarotContext.selectCard(card);
+      // Set the card as flipping before selection
+      setFlippingCardId(card.id);
       
-      toast({
-        title: `Card ${tarotContext.selectedCards.length + 1} selected`,
-        description: maxCards > 1 ? `${maxCards - tarotContext.selectedCards.length - 1} more to go` : `Your card has been selected.`,
-      });
+      // Add a delay for the flip animation to complete
+      setTimeout(() => {
+        tarotContext.selectCard(card);
+        setFlippingCardId(null);
+        
+        toast({
+          title: `Card ${tarotContext.selectedCards.length + 1} selected`,
+          description: maxCards > 1 ? `${maxCards - tarotContext.selectedCards.length - 1} more to go` : `Your card has been selected.`,
+        });
+      }, 800); // Match this delay with the flipCard animation duration
     } else {
       toast({
         title: "Maximum cards selected",
@@ -106,6 +114,11 @@ const CardSelectionPage = () => {
   // Calculate card width based on viewport size
   const cardWidth = calculateCardSize(windowWidth, cards.length);
 
+  // Filter out selected cards from the deck display
+  const displayedCards = cards.filter(card => 
+    !tarotContext.selectedCards.some(selectedCard => selectedCard.id === card.id)
+  );
+
   const renderFanDeck = () => {
     // Don't render fan deck on mobile
     if (isMobile) return null;
@@ -113,10 +126,11 @@ const CardSelectionPage = () => {
     return (
       <div className="relative h-[400px] w-full mt-8 mb-12 overflow-visible">
         <div className="absolute w-full h-full flex items-center justify-center">
-          {cards.map((card, index) => {
+          {displayedCards.map((card, index) => {
             // Calculate fan position
-            const { rotation, translateX, translateY, zIndex } = calculateFanPosition(index, cards.length);
+            const { rotation, translateX, translateY, zIndex } = calculateFanPosition(index, displayedCards.length);
             const isCardSelected = tarotContext.isCardSelected(card.id);
+            const isCardFlipping = flippingCardId === card.id;
             
             return (
               <div 
@@ -124,20 +138,23 @@ const CardSelectionPage = () => {
                 className={cn(
                   "absolute transition-all duration-500 transform-gpu",
                   isShuffling && "animate-pulse",
-                  isCardSelected && "opacity-50"
+                  isCardSelected && "opacity-50",
+                  isCardFlipping && "z-50"
                 )}
                 style={{
                   transform: `translateX(${translateX}px) translateY(${translateY}px) rotate(${rotation}deg)`,
                   zIndex: zIndex,
-                  width: `${cardWidth}px`
+                  width: `${cardWidth}px`,
+                  opacity: isCardFlipping ? 0.8 : 1, // Make card slightly transparent while flipping
                 }}
               >
                 <TarotCard
                   id={card.id}
                   name={card.name}
                   isSelected={isCardSelected}
-                  onClick={() => !isShuffling && handleCardSelect(card)}
-                  className="w-full h-auto transform hover:scale-105 transition-transform"
+                  isFlipping={isCardFlipping}
+                  onClick={() => !isShuffling && !isCardFlipping && handleCardSelect(card)}
+                  className="w-full h-auto"
                 />
               </div>
             );
@@ -161,21 +178,56 @@ const CardSelectionPage = () => {
           className="w-full"
         >
           <CarouselContent>
-            {cards.map((card) => (
-              <CarouselItem key={card.id} className="md:basis-1/3 lg:basis-1/4 pl-2">
-                <TarotCard
-                  id={card.id}
-                  name={card.name}
-                  isSelected={tarotContext.isCardSelected(card.id)}
-                  onClick={() => !isShuffling && handleCardSelect(card)}
-                  className="w-full h-auto"
-                />
-              </CarouselItem>
-            ))}
+            {displayedCards.map((card) => {
+              const isCardFlipping = flippingCardId === card.id;
+              
+              return (
+                <CarouselItem key={card.id} className="md:basis-1/3 lg:basis-1/4 pl-2">
+                  <TarotCard
+                    id={card.id}
+                    name={card.name}
+                    isSelected={tarotContext.isCardSelected(card.id)}
+                    isFlipping={isCardFlipping}
+                    onClick={() => !isShuffling && !isCardFlipping && handleCardSelect(card)}
+                    className="w-full h-auto"
+                  />
+                </CarouselItem>
+              );
+            })}
           </CarouselContent>
           <CarouselPrevious className="left-1" />
           <CarouselNext className="right-1" />
         </Carousel>
+      </div>
+    );
+  };
+
+  // Render selected cards area above the deck
+  const renderSelectedCardsArea = () => {
+    if (tarotContext.selectedCards.length === 0) {
+      return (
+        <div className="selected-card-area flex items-center justify-center p-6 mt-4 mb-8">
+          <p className="text-white/50 italic">Select cards from the deck below</p>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="selected-card-area p-6 mt-4 mb-8">
+        <h3 className="font-serif text-xl text-center text-mystical-gold mb-4">Your Selected Cards</h3>
+        <div className="flex flex-wrap justify-center gap-4">
+          {tarotContext.selectedCards.map((card, index) => (
+            <div key={index} className="animate-fade-in">
+              <TarotCard
+                id={card.id}
+                name={card.name}
+                isSelected={true}
+                onClick={() => handleCardSelect(card)}
+                className="w-24 h-auto"
+              />
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
@@ -218,31 +270,14 @@ const CardSelectionPage = () => {
         </div>
       </div>
 
+      {/* Selected Cards Section - Now above the deck */}
+      {renderSelectedCardsArea()}
+
       {/* Primary Deck Display - Fan Layout or Mobile Carousel */}
-      <div className="deck-container my-8">
+      <div className="deck-container mt-4">
         {renderFanDeck()}
         {renderMobileCarousel()}
       </div>
-
-      {/* Selected Cards Section */}
-      {tarotContext.selectedCards.length > 0 && (
-        <div className="mt-8">
-          <h3 className="font-serif text-xl text-center text-mystical-gold mb-4">Your Selected Cards</h3>
-          <div className="flex flex-wrap justify-center gap-4">
-            {tarotContext.selectedCards.map((card, index) => (
-              <div key={index} className="animate-fade-in">
-                <TarotCard
-                  id={card.id}
-                  name={card.name}
-                  isSelected={true}
-                  onClick={() => handleCardSelect(card)}
-                  className="w-24 h-auto"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

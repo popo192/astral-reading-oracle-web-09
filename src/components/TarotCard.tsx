@@ -12,6 +12,7 @@ interface TarotCardProps {
   onClick?: () => void;
   className?: string;
   position?: 'past' | 'present' | 'future' | 'single';
+  isFlipping?: boolean;
 }
 
 const TarotCard: React.FC<TarotCardProps> = ({
@@ -24,6 +25,7 @@ const TarotCard: React.FC<TarotCardProps> = ({
   onClick,
   className = '',
   position,
+  isFlipping = false,
 }) => {
   const [hover, setHover] = useState(false);
   
@@ -51,6 +53,7 @@ const TarotCard: React.FC<TarotCardProps> = ({
         className={cn(
           "card-container cursor-pointer perspective-1000",
           isRevealed && "card-flipped",
+          isFlipping && "animate-flip-card",
           isSelected && !isRevealed && "ring-2 ring-mystical-gold shadow-lg shadow-mystical-gold/30",
           hover && !isRevealed && !isSelected && "shadow-md shadow-mystical-purple-light/30",
           isSelected && !isRevealed && "animate-float"
@@ -67,6 +70,7 @@ const TarotCard: React.FC<TarotCardProps> = ({
           <div 
             className={cn(
               "card-front rounded-lg shadow-lg overflow-hidden shimmer",
+              "border border-mystical-purple-light/20", // Make cards more visible
               hover && !isRevealed && "shadow-mystical-gold/30",
               isSelected && !isRevealed && "animate-glow"
             )}

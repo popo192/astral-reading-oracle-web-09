@@ -96,3 +96,16 @@ export const calculateArcPosition = (
     rotation: (angle * 180 / Math.PI) - 90
   };
 };
+
+/**
+ * Generate a selection animation transition
+ * @param card The card being selected
+ * @param delay Optional delay before animation starts
+ * @returns Animation parameters
+ */
+export const generateSelectionAnimation = (card: any, delay = 0) => {
+  return {
+    transitionDelay: `${delay}ms`,
+    animationDelay: `${delay}ms`,
+  };
+};

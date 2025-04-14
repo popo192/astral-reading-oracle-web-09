@@ -52,7 +52,8 @@ const TarotCard: React.FC<TarotCardProps> = ({
           "card-container cursor-pointer perspective-1000",
           isRevealed && "card-flipped",
           isSelected && !isRevealed && "ring-2 ring-mystical-gold shadow-lg shadow-mystical-gold/30",
-          hover && !isRevealed && !isSelected && "shadow-md shadow-mystical-purple-light/30"
+          hover && !isRevealed && !isSelected && "shadow-md shadow-mystical-purple-light/30",
+          isSelected && !isRevealed && "animate-float"
         )}
         onClick={onClick}
         onMouseEnter={() => setHover(true)}
@@ -65,7 +66,7 @@ const TarotCard: React.FC<TarotCardProps> = ({
         )}>
           <div 
             className={cn(
-              "card-front rounded-lg shadow-lg overflow-hidden",
+              "card-front rounded-lg shadow-lg overflow-hidden shimmer",
               hover && !isRevealed && "shadow-mystical-gold/30",
               isSelected && !isRevealed && "animate-glow"
             )}

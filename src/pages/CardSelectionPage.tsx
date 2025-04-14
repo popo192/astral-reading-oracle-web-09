@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Shuffle, ArrowRight } from 'lucide-react';
@@ -6,6 +7,9 @@ import TarotCard from '@/components/TarotCard';
 import { tarotCards } from '@/data/tarotCards';
 import { useTarot, ReadingType } from '@/contexts/TarotContext';
 import { toast } from "@/components/ui/use-toast";
+import { calculateFanPosition, calculateCardSize } from '@/utils/DeckUtils';
+import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Carousel,
   CarouselContent,
@@ -19,7 +23,8 @@ const CardSelectionPage = () => {
   const navigate = useNavigate();
   const [cards, setCards] = useState([...tarotCards]);
   const [isShuffling, setIsShuffling] = useState(false);
-  const [activeCardIndex, setActiveCardIndex] = useState<number | null>(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const isMobile = useIsMobile();
   
   const tarotContext = useTarot();
 
@@ -30,6 +35,17 @@ const CardSelectionPage = () => {
     }
   }, [readingType]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const shuffleCards = () => {
     setIsShuffling(true);
     
@@ -38,9 +54,14 @@ const CardSelectionPage = () => {
       description: "The cards are being shuffled to reveal your destiny.",
     });
     
+    // Generate a random shuffle animation for each card
+    const shuffledCards = [...cards];
+    
+    // Visual shuffling animation
     setTimeout(() => {
-      const shuffled = [...cards].sort(() => Math.random() - 0.5);
-      setCards(shuffled);
+      // After animation, actually shuffle the order
+      const newOrder = [...shuffledCards].sort(() => Math.random() - 0.5);
+      setCards(newOrder);
       setIsShuffling(false);
     }, 1000);
   };
@@ -82,13 +103,19 @@ const CardSelectionPage = () => {
     }
   };
 
+  // Calculate card width based on viewport size
+  const cardWidth = calculateCardSize(windowWidth, cards.length);
+
   const renderFanDeck = () => {
+    // Don't render fan deck on mobile
+    if (isMobile) return null;
+    
     return (
-      <div className="relative h-[400px] w-full hidden md:block mt-12 mb-8">
+      <div className="relative h-[400px] w-full mt-8 mb-12 overflow-visible">
         <div className="absolute w-full h-full flex items-center justify-center">
           {cards.map((card, index) => {
-            const rotation = -20 + (index * (40 / cards.length));
-            const translateX = -100 + (index * (200 / cards.length));
+            // Calculate fan position
+            const { rotation, translateX, translateY, zIndex } = calculateFanPosition(index, cards.length);
             const isCardSelected = tarotContext.isCardSelected(card.id);
             
             return (
@@ -96,13 +123,13 @@ const CardSelectionPage = () => {
                 key={card.id}
                 className={cn(
                   "absolute transition-all duration-500 transform-gpu",
-                  isShuffling && "animate-spin-slow",
-                  isCardSelected && "translate-y-[-100px]"
+                  isShuffling && "animate-pulse",
+                  isCardSelected && "opacity-50"
                 )}
                 style={{
-                  transform: `translateX(${translateX}px) rotate(${rotation}deg)`,
-                  zIndex: index,
-                  opacity: isCardSelected ? 0.7 : 1
+                  transform: `translateX(${translateX}px) translateY(${translateY}px) rotate(${rotation}deg)`,
+                  zIndex: zIndex,
+                  width: `${cardWidth}px`
                 }}
               >
                 <TarotCard
@@ -110,7 +137,7 @@ const CardSelectionPage = () => {
                   name={card.name}
                   isSelected={isCardSelected}
                   onClick={() => !isShuffling && handleCardSelect(card)}
-                  className="w-24 h-auto transform hover:scale-105 transition-transform duration-300"
+                  className="w-full h-auto transform hover:scale-105 transition-transform"
                 />
               </div>
             );
@@ -121,18 +148,21 @@ const CardSelectionPage = () => {
   };
 
   const renderMobileCarousel = () => {
+    // Only render on mobile
+    if (!isMobile) return null;
+    
     return (
-      <div className="md:hidden w-full my-6">
+      <div className="w-full my-6">
         <Carousel
           opts={{
-            align: "start",
+            align: "center",
             loop: true,
           }}
           className="w-full"
         >
           <CarouselContent>
             {cards.map((card) => (
-              <CarouselItem key={card.id} className="md:basis-1/2 lg:basis-1/3 pl-2">
+              <CarouselItem key={card.id} className="md:basis-1/3 lg:basis-1/4 pl-2">
                 <TarotCard
                   id={card.id}
                   name={card.name}
@@ -152,7 +182,7 @@ const CardSelectionPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-8 animate-fade-in">
+      <div className="text-center mb-6 animate-fade-in">
         <h1 className="font-serif text-3xl font-bold mb-4 bg-gradient-to-r from-white to-mystical-purple-light bg-clip-text text-transparent">
           {readingType === 'three-card' ? 'Past-Present-Future Reading' : 'Single Card Insight'}
         </h1>
@@ -188,10 +218,13 @@ const CardSelectionPage = () => {
         </div>
       </div>
 
-      {renderFanDeck()}
+      {/* Primary Deck Display - Fan Layout or Mobile Carousel */}
+      <div className="deck-container my-8">
+        {renderFanDeck()}
+        {renderMobileCarousel()}
+      </div>
 
-      {renderMobileCarousel()}
-
+      {/* Selected Cards Section */}
       {tarotContext.selectedCards.length > 0 && (
         <div className="mt-8">
           <h3 className="font-serif text-xl text-center text-mystical-gold mb-4">Your Selected Cards</h3>
@@ -210,29 +243,8 @@ const CardSelectionPage = () => {
           </div>
         </div>
       )}
-
-      <div className={cn(
-        "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4 mt-12",
-        isShuffling ? 'opacity-50' : ''
-      )}>
-        {cards.map((card) => (
-          <div key={card.id} className="animate-fade-in">
-            <TarotCard
-              id={card.id}
-              name={card.name}
-              isSelected={tarotContext.isCardSelected(card.id)}
-              onClick={() => !isShuffling && handleCardSelect(card)}
-              className="transform hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-        ))}
-      </div>
     </div>
   );
-};
-
-const cn = (...classes: any[]) => {
-  return classes.filter(Boolean).join(' ');
 };
 
 export default CardSelectionPage;

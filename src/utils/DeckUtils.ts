@@ -65,3 +65,34 @@ export const generateShuffleSequence = (cardCount: number) => {
     rotation: (Math.random() - 0.5) * 360, // Random full rotation
   }));
 };
+
+/**
+ * Determine if a card has been selected
+ * @param cardId ID of the card to check
+ * @param selectedIds Array of selected card IDs
+ * @returns Boolean indicating if card is selected
+ */
+export const isCardSelected = (cardId: number, selectedIds: number[]) => {
+  return selectedIds.includes(cardId);
+};
+
+/**
+ * Create arc layout parameters for card positioning
+ * @param index Index of card in the deck
+ * @param totalCards Total number of cards
+ * @param radius Radius of the arc
+ * @returns Position parameters for the card
+ */
+export const calculateArcPosition = (
+  index: number,
+  totalCards: number,
+  radius = 300
+) => {
+  const angle = -(Math.PI / 4) + ((index / (totalCards - 1)) * (Math.PI / 2));
+  
+  return {
+    x: radius * Math.cos(angle),
+    y: radius * Math.sin(angle),
+    rotation: (angle * 180 / Math.PI) - 90
+  };
+};

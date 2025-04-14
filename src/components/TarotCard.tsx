@@ -49,26 +49,36 @@ const TarotCard: React.FC<TarotCardProps> = ({
       
       <div 
         className={cn(
-          "card-container cursor-pointer",
+          "card-container cursor-pointer perspective-1000",
           isRevealed && "card-flipped",
-          isSelected && !isRevealed && "ring-2 ring-mystical-gold"
+          isSelected && !isRevealed && "ring-2 ring-mystical-gold shadow-lg shadow-mystical-gold/30",
+          hover && !isRevealed && !isSelected && "shadow-md shadow-mystical-purple-light/30"
         )}
         onClick={onClick}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
         <div className={cn(
-          "card-inner w-full h-full",
-          hover && !isRevealed && "scale-105 transition-transform duration-300"
+          "card-inner w-full h-full transition-transform duration-500",
+          hover && !isRevealed && !isSelected && "scale-105 translate-y-[-5px]",
+          isSelected && !isRevealed && "scale-105 translate-y-[-8px]"
         )}>
           <div 
             className={cn(
               "card-front rounded-lg shadow-lg overflow-hidden",
-              hover && !isRevealed && "shadow-mystical-gold/30"
+              hover && !isRevealed && "shadow-mystical-gold/30",
+              isSelected && !isRevealed && "animate-glow"
             )}
             style={cardBackStyle}
           >
-            <div className="w-full pb-[150%]"></div>
+            <div className="w-full pb-[150%] relative">
+              {isSelected && !isRevealed && (
+                <div className="absolute inset-0 bg-gradient-to-b from-mystical-gold/20 to-transparent opacity-70"></div>
+              )}
+              {hover && !isRevealed && !isSelected && (
+                <div className="absolute inset-0 bg-gradient-to-b from-mystical-purple-light/20 to-transparent opacity-50"></div>
+              )}
+            </div>
           </div>
           
           <div 

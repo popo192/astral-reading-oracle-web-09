@@ -86,17 +86,17 @@ const ReadingResultPage = () => {
       </div>
 
       <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6 md:gap-12 mb-12">
-        {tarotContext.selectedCards.map((cardId, index) => {
-          const card = getCardDetails(cardId);
+        {tarotContext.selectedCards.map((card, index) => {
+          const cardDetails = getCardDetails(card.id);
           const position = getPositionLabel(index);
           
           return (
             <div key={index} className="w-full md:w-64 animate-fade-in">
               <div className="mb-8">
                 <TarotCard
-                  id={card.id}
-                  name={card.name}
-                  image={card.image}
+                  id={cardDetails.id}
+                  name={cardDetails.name}
+                  image={cardDetails.image}
                   isRevealed={revealedCards[index]}
                   position={position as any}
                   className="mx-auto"
@@ -105,10 +105,10 @@ const ReadingResultPage = () => {
               
               {revealedCards[index] && (
                 <div className="text-center animate-fade-in">
-                  <h3 className="font-serif text-xl text-mystical-gold mb-2">{card.name}</h3>
-                  <p className="text-sm text-white/80 font-medium mb-3">{card.meaning.upright}</p>
+                  <h3 className="font-serif text-xl text-mystical-gold mb-2">{cardDetails.name}</h3>
+                  <p className="text-sm text-white/80 font-medium mb-3">{cardDetails.meaning.upright}</p>
                   <p className="text-sm text-white/70">
-                    {getPositionalMeaning(card, position)}
+                    {getPositionalMeaning(cardDetails, position)}
                   </p>
                 </div>
               )}

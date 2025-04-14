@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Shuffle, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,7 +7,7 @@ import TarotCard from '@/components/TarotCard';
 import { tarotCards } from '@/data/tarotCards';
 import { useTarot, ReadingType } from '@/contexts/TarotContext';
 import { toast } from "@/components/ui/use-toast";
-import { calculateFanPosition, calculateCardSize, generateSelectionAnimation } from '@/utils/DeckUtils';
+import { calculateFanPosition, calculateCardSize, calculateFanWidth, generateShuffleSequence } from '@/utils/DeckUtils';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
@@ -25,6 +25,7 @@ const CardSelectionPage = () => {
   const [isShuffling, setIsShuffling] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [flippingCardId, setFlippingCardId] = useState<number | null>(null);
+  const [selectionComplete, setSelectionComplete] = useState(false);
   const isMobile = useIsMobile();
   
   const tarotContext = useTarot();
@@ -47,6 +48,16 @@ const CardSelectionPage = () => {
     };
   }, []);
 
+  // Check if selection is complete
+  useEffect(() => {
+    const requiredCards = readingType === 'three-card' ? 3 : 1;
+    if (tarotContext.selectedCards.length === requiredCards) {
+      setSelectionComplete(true);
+    } else {
+      setSelectionComplete(false);
+    }
+  }, [tarotContext.selectedCards.length, readingType]);
+
   const shuffleCards = () => {
     setIsShuffling(true);
     
@@ -55,23 +66,20 @@ const CardSelectionPage = () => {
       description: "The cards are being shuffled to reveal your destiny.",
     });
     
-    // Generate a random shuffle animation for each card
-    const shuffledCards = [...cards];
-    
     // Visual shuffling animation
     setTimeout(() => {
       // After animation, actually shuffle the order
-      const newOrder = [...shuffledCards].sort(() => Math.random() - 0.5);
+      const newOrder = [...cards].sort(() => Math.random() - 0.5);
       setCards(newOrder);
       setIsShuffling(false);
     }, 1000);
   };
 
-  const handleCardSelect = (card: any) => {
+  const handleCardSelect = useCallback((card: any) => {
     const maxCards = readingType === 'three-card' ? 3 : 1;
     
     if (tarotContext.isCardSelected(card.id)) {
-      tarotContext.selectCard(card);
+      tarotContext.selectCard(card); // This will unselect the card
       return;
     }
     
@@ -96,7 +104,7 @@ const CardSelectionPage = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [readingType, tarotContext]);
 
   const handleGetReading = () => {
     const requiredCards = readingType === 'three-card' ? 3 : 1;
@@ -111,8 +119,11 @@ const CardSelectionPage = () => {
     }
   };
 
-  // Calculate card width based on viewport size
+  // Calculate card width based on viewport size and number of cards
   const cardWidth = calculateCardSize(windowWidth, cards.length);
+
+  // Calculate fan width based on number of cards
+  const fanWidth = calculateFanWidth(cards.length, windowWidth);
 
   // Filter out selected cards from the deck display
   const displayedCards = cards.filter(card => 
@@ -120,16 +131,19 @@ const CardSelectionPage = () => {
   );
 
   const renderFanDeck = () => {
-    // Don't render fan deck on mobile
-    if (isMobile) return null;
+    // Don't render fan deck on mobile or if selection is complete
+    if (isMobile || selectionComplete) return null;
     
     return (
       <div className="relative h-[400px] w-full mt-8 mb-12 overflow-visible">
         <div className="absolute w-full h-full flex items-center justify-center">
           {displayedCards.map((card, index) => {
             // Calculate fan position
-            const { rotation, translateX, translateY, zIndex } = calculateFanPosition(index, displayedCards.length);
-            const isCardSelected = tarotContext.isCardSelected(card.id);
+            const { rotation, translateX, translateY, zIndex } = calculateFanPosition(
+              index, 
+              displayedCards.length,
+              fanWidth
+            );
             const isCardFlipping = flippingCardId === card.id;
             
             return (
@@ -138,7 +152,6 @@ const CardSelectionPage = () => {
                 className={cn(
                   "absolute transition-all duration-500 transform-gpu",
                   isShuffling && "animate-pulse",
-                  isCardSelected && "opacity-50",
                   isCardFlipping && "z-50"
                 )}
                 style={{
@@ -151,7 +164,7 @@ const CardSelectionPage = () => {
                 <TarotCard
                   id={card.id}
                   name={card.name}
-                  isSelected={isCardSelected}
+                  isSelected={tarotContext.isCardSelected(card.id)}
                   isFlipping={isCardFlipping}
                   onClick={() => !isShuffling && !isCardFlipping && handleCardSelect(card)}
                   className="w-full h-auto"
@@ -165,8 +178,8 @@ const CardSelectionPage = () => {
   };
 
   const renderMobileCarousel = () => {
-    // Only render on mobile
-    if (!isMobile) return null;
+    // Only render on mobile and if selection is not complete
+    if (!isMobile || selectionComplete) return null;
     
     return (
       <div className="w-full my-6">
@@ -213,7 +226,7 @@ const CardSelectionPage = () => {
     }
     
     return (
-      <div className="selected-card-area p-6 mt-4 mb-8">
+      <div className="selected-card-area p-6 mt-4 mb-8 animate-fade-in">
         <h3 className="font-serif text-xl text-center text-mystical-gold mb-4">Your Selected Cards</h3>
         <div className="flex flex-wrap justify-center gap-4">
           {tarotContext.selectedCards.map((card, index) => (
@@ -247,7 +260,7 @@ const CardSelectionPage = () => {
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-4">
           <Button 
             onClick={shuffleCards}
-            disabled={isShuffling}
+            disabled={isShuffling || selectionComplete}
             className="bg-mystical-purple hover:bg-mystical-purple-dark text-white w-full sm:w-auto"
           >
             <Shuffle className="mr-2 h-4 w-4" />
@@ -270,13 +283,51 @@ const CardSelectionPage = () => {
         </div>
       </div>
 
-      {/* Selected Cards Section - Now above the deck */}
+      {/* Selected Cards Section - Above the deck */}
       {renderSelectedCardsArea()}
 
       {/* Primary Deck Display - Fan Layout or Mobile Carousel */}
       <div className="deck-container mt-4">
-        {renderFanDeck()}
-        {renderMobileCarousel()}
+        {!selectionComplete && (
+          <>
+            {renderFanDeck()}
+            {renderMobileCarousel()}
+            
+            {/* For mobile display when selection is NOT complete, show a static grid of cards */}
+            {isMobile && (
+              <div className="grid grid-cols-3 gap-2 my-6">
+                {displayedCards.slice(0, 9).map((card) => {
+                  const isCardFlipping = flippingCardId === card.id;
+                  
+                  return (
+                    <div key={card.id} className="aspect-[2/3]">
+                      <TarotCard
+                        id={card.id}
+                        name={card.name}
+                        isSelected={tarotContext.isCardSelected(card.id)}
+                        isFlipping={isCardFlipping}
+                        onClick={() => !isShuffling && !isCardFlipping && handleCardSelect(card)}
+                        className="w-full h-full"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
+        
+        {/* When selection is complete, show a congratulatory message */}
+        {selectionComplete && (
+          <div className="text-center py-10 animate-fade-in">
+            <h3 className="font-serif text-2xl text-mystical-gold mb-4">
+              Your cards have been chosen!
+            </h3>
+            <p className="text-white/70 mb-6">
+              Click "Get Reading" to reveal your tarot insights.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

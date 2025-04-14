@@ -30,7 +30,7 @@ const TarotCard: React.FC<TarotCardProps> = ({
   const [hover, setHover] = useState(false);
   
   const cardBackStyle = {
-    backgroundImage: `url('/card-back.jpg')`,
+    backgroundImage: `url('/tarot/card-back.svg')`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   };

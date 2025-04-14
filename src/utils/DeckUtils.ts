@@ -41,16 +41,16 @@ export const calculateFanPosition = (
  * @returns Optimal card width in pixels
  */
 export const calculateCardSize = (viewportWidth: number, cardCount: number) => {
-  // Base size calculations depending on viewport
+  // Base size calculations depending on viewport and card count
   if (viewportWidth < 640) {
     // Mobile: cards should be ~80-100px
-    return Math.min(100, (viewportWidth - 40) / 3);
+    return Math.min(100, (viewportWidth - 40) / Math.min(cardCount, 3));
   } else if (viewportWidth < 1024) {
     // Tablet: cards should be ~100-120px
-    return Math.min(120, (viewportWidth - 60) / 5);
+    return Math.min(120, (viewportWidth - 60) / Math.min(cardCount, 5));
   } else {
     // Desktop: cards should be ~130-150px
-    return Math.min(150, (viewportWidth - 80) / 8);
+    return Math.min(150, (viewportWidth - 80) / Math.min(cardCount, 8));
   }
 };
 
@@ -108,4 +108,21 @@ export const generateSelectionAnimation = (card: any, delay = 0) => {
     transitionDelay: `${delay}ms`,
     animationDelay: `${delay}ms`,
   };
+};
+
+/**
+ * Calculate the fan width based on the number of cards
+ * @param cardCount Number of cards in the deck
+ * @param viewportWidth Current viewport width
+ * @returns Optimal fan width in degrees
+ */
+export const calculateFanWidth = (cardCount: number, viewportWidth: number) => {
+  // Adjust fan width based on number of cards and viewport
+  if (viewportWidth < 640) {
+    return Math.min(90, 60 + (cardCount * 0.5)); // Narrower on mobile
+  } else if (viewportWidth < 1024) {
+    return Math.min(150, 100 + (cardCount * 0.5)); // Medium on tablet
+  } else {
+    return Math.min(180, 120 + (cardCount * 0.5)); // Wider on desktop
+  }
 };

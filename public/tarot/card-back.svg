@@ -1,0 +1,50 @@
+
+<svg width="300" height="450" viewBox="0 0 300 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Deep blue background -->
+  <rect width="300" height="450" rx="15" fill="#121640"/>
+  
+  <!-- Outer border -->
+  <rect x="10" y="10" width="280" height="430" rx="10" stroke="#D4AF37" stroke-width="2" fill="none"/>
+  
+  <!-- Inner border -->
+  <rect x="20" y="20" width="260" height="410" rx="5" stroke="#D4AF37" stroke-opacity="0.7" stroke-width="1" fill="none"/>
+  
+  <!-- Central celestial motif - moon and stars -->
+  <circle cx="150" cy="225" r="60" fill="#1A1E4A"/>
+  <circle cx="150" cy="225" r="55" fill="#121640"/>
+  <circle cx="150" cy="225" r="50" stroke="#D4AF37" stroke-opacity="0.8" stroke-width="1.5" fill="none"/>
+  
+  <!-- Moon crescent -->
+  <path d="M185 225C185 244.33 169.33 260 150 260C130.67 260 115 244.33 115 225C115 205.67 130.67 190 150 190C169.33 190 185 205.67 185 225Z" fill="#121640"/>
+  <path d="M170 225C170 236.05 161.05 245 150 245C138.95 245 130 236.05 130 225C130 213.95 138.95 205 150 205C161.05 205 170 213.95 170 225Z" stroke="#D4AF37" stroke-opacity="0.8" stroke-width="1" fill="none"/>
+  
+  <!-- Stars pattern -->
+  <circle cx="150" cy="100" r="3" fill="#D4AF37" fill-opacity="0.9"/>
+  <circle cx="150" cy="350" r="3" fill="#D4AF37" fill-opacity="0.9"/>
+  <circle cx="75" cy="225" r="3" fill="#D4AF37" fill-opacity="0.9"/>
+  <circle cx="225" cy="225" r="3" fill="#D4AF37" fill-opacity="0.9"/>
+  
+  <!-- Diagonal stars -->
+  <circle cx="100" cy="175" r="2" fill="#D4AF37" fill-opacity="0.8"/>
+  <circle cx="100" cy="275" r="2" fill="#D4AF37" fill-opacity="0.8"/>
+  <circle cx="200" cy="175" r="2" fill="#D4AF37" fill-opacity="0.8"/>
+  <circle cx="200" cy="275" r="2" fill="#D4AF37" fill-opacity="0.8"/>
+  
+  <!-- Small accent stars -->
+  <circle cx="120" cy="125" r="1.5" fill="#D4AF37" fill-opacity="0.7"/>
+  <circle cx="120" cy="325" r="1.5" fill="#D4AF37" fill-opacity="0.7"/>
+  <circle cx="180" cy="125" r="1.5" fill="#D4AF37" fill-opacity="0.7"/>
+  <circle cx="180" cy="325" r="1.5" fill="#D4AF37" fill-opacity="0.7"/>
+  
+  <!-- Corner ornaments -->
+  <path d="M35 35L45 45M35 45L45 35" stroke="#D4AF37" stroke-width="1.5"/>
+  <path d="M255 35L265 45M255 45L265 35" stroke="#D4AF37" stroke-width="1.5"/>
+  <path d="M35 415L45 425M35 425L45 415" stroke="#D4AF37" stroke-width="1.5"/>
+  <path d="M255 415L265 425M255 425L265 415" stroke="#D4AF37" stroke-width="1.5"/>
+  
+  <!-- Subtle constellation patterns -->
+  <path d="M75 75L95 65L110 85" stroke="#D4AF37" stroke-opacity="0.4" stroke-width="0.75"/>
+  <path d="M190 85L205 65L225 75" stroke="#D4AF37" stroke-opacity="0.4" stroke-width="0.75"/>
+  <path d="M75 375L95 385L110 365" stroke="#D4AF37" stroke-opacity="0.4" stroke-width="0.75"/>
+  <path d="M190 365L205 385L225 375" stroke="#D4AF37" stroke-opacity="0.4" stroke-width="0.75"/>
+</svg>

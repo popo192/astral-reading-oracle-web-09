@@ -13,15 +13,15 @@
 export const calculateFanPosition = (
   index: number, 
   totalCards: number,
-  fanWidth = 120
+  fanWidth = 150
 ) => {
   // Calculate rotation (from -fanWidth/2 to +fanWidth/2)
   const rotation = -(fanWidth / 2) + (index * (fanWidth / (totalCards - 1)));
   
   // Calculate translation based on rotation
-  // More rotation means more horizontal offset
-  const translateX = (Math.sin(rotation * Math.PI / 180) * 50);
-  const translateY = (Math.abs(rotation) / 3); // Slight vertical offset based on angle
+  // More rotation means more horizontal offset - increased multiplier for wider spread
+  const translateX = (Math.sin(rotation * Math.PI / 180) * 70);
+  const translateY = (Math.abs(rotation) / 4) - 30; // Reduced vertical offset and moved higher up
   
   // Calculate z-index to ensure proper layering
   const zIndex = index;
@@ -117,12 +117,12 @@ export const generateSelectionAnimation = (card: any, delay = 0) => {
  * @returns Optimal fan width in degrees
  */
 export const calculateFanWidth = (cardCount: number, viewportWidth: number) => {
-  // Adjust fan width based on number of cards and viewport
+  // Adjust fan width based on number of cards and viewport - wider fan overall
   if (viewportWidth < 640) {
-    return Math.min(90, 60 + (cardCount * 0.5)); // Narrower on mobile
+    return Math.min(120, 80 + (cardCount * 0.5)); // Wider on mobile
   } else if (viewportWidth < 1024) {
-    return Math.min(150, 100 + (cardCount * 0.5)); // Medium on tablet
+    return Math.min(180, 120 + (cardCount * 0.5)); // Wider on tablet
   } else {
-    return Math.min(180, 120 + (cardCount * 0.5)); // Wider on desktop
+    return Math.min(210, 150 + (cardCount * 0.5)); // Much wider on desktop
   }
 };

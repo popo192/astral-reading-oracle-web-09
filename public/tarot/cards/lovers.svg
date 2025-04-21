@@ -1,0 +1,51 @@
+
+<svg width="300" height="450" viewBox="0 0 300 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Card background -->
+  <rect width="300" height="450" rx="15" fill="#121640"/>
+  <rect x="10" y="10" width="280" height="430" rx="10" stroke="#D4AF37" stroke-width="2" fill="#1E1D3A"/>
+  
+  <!-- The Lovers -->
+  <g>
+    <!-- Paradise background -->
+    <rect x="20" y="100" width="260" height="280" fill="#2A5738"/>
+    <path d="M150 100V380" stroke="#D4AF37" stroke-width="1" stroke-dasharray="5 5"/>
+    
+    <!-- Tree -->
+    <rect x="140" y="180" width="20" height="200" fill="#8B4513"/>
+    <circle cx="150" cy="150" r="50" fill="#2D7540"/>
+    
+    <!-- Serpent -->
+    <path d="M150 180C150 180 170 190 160 210C150 230 170 240 170 240" stroke="#ea384c" stroke-width="5" fill="none"/>
+    <circle cx="170" cy="240" r="3" fill="#000000"/>
+    
+    <!-- Sun -->
+    <circle cx="150" cy="50" r="25" fill="#F0C04A"/>
+    <circle cx="150" cy="50" r="15" fill="#F9DE6C"/>
+    
+    <!-- Male figure -->
+    <circle cx="100" cy="280" r="20" fill="#FFD3B5"/>
+    <path d="M90 300L110 300V350H90V300Z" fill="#FFD3B5"/>
+    <circle cx="95" cy="275" r="2" fill="#000000"/>
+    <path d="M90 285C90 285 100 290 100 285" stroke="#000000" stroke-width="1"/>
+    
+    <!-- Female figure -->
+    <circle cx="200" cy="280" r="20" fill="#FFD3B5"/>
+    <path d="M190 300L210 300V350H190V300Z" fill="#FFD3B5"/>
+    <circle cx="205" cy="275" r="2" fill="#000000"/>
+    <path d="M200 285C200 285 210 290 210 285" stroke="#000000" stroke-width="1"/>
+    
+    <!-- Angel above -->
+    <ellipse cx="150" cy="90" rx="30" ry="15" fill="#FF9BD2"/>
+    <circle cx="150" cy="70" r="15" fill="#FFD3B5"/>
+    <path d="M135 90L165 90" stroke="#FF9BD2" stroke-width="5"/>
+    <path d="M120 70C120 70 130 50 150 50C170 50 180 70 180 70" stroke="#FF9BD2" stroke-width="5" fill="none"/>
+  </g>
+  
+  <!-- Card title -->
+  <rect x="20" y="390" width="260" height="40" rx="5" fill="#121640" fill-opacity="0.7"/>
+  <text x="150" y="415" font-family="serif" font-size="18" text-anchor="middle" fill="#D4AF37">The Lovers</text>
+  
+  <!-- Card number -->
+  <circle cx="30" cy="30" r="15" fill="#121640"/>
+  <text x="30" y="35" font-family="serif" font-size="18" text-anchor="middle" fill="#D4AF37">VI</text>
+</svg>

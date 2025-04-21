@@ -1,0 +1,48 @@
+
+<svg width="300" height="450" viewBox="0 0 300 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Card background -->
+  <rect width="300" height="450" rx="15" fill="#121640"/>
+  <rect x="10" y="10" width="280" height="430" rx="10" stroke="#D4AF37" stroke-width="2" fill="#1E1D3A"/>
+  
+  <!-- Death -->
+  <g>
+    <!-- Barren landscape -->
+    <path d="M20 300C20 300 60 320 100 300C140 280 160 320 200 300C240 280 280 310 280 310V430H20V300Z" fill="#333333"/>
+    <path d="M30 340C30 340 80 320 120 340C160 360 180 320 220 340C260 360 290 330 290 330V430H20V340H30Z" fill="#222222"/>
+    
+    <!-- River Styx -->
+    <path d="M30 380C30 380 50 370 70 380C90 390 110 370 130 380C150 390 170 370 190 380C210 390 230 370 250 380C270 390 290 380 290 380V430H30V380Z" fill="#304352"/>
+    
+    <!-- Death figure on horse -->
+    <path d="M170 200C170 200 180 220 200 220C220 220 240 200 240 180C240 150 220 140 200 140C180 140 170 150 170 180V200Z" fill="#333333"/> <!-- Horse head -->
+    <path d="M150 200C150 200 180 190 200 200C220 210 230 240 230 270C230 300 210 320 170 320C130 320 120 300 120 270C120 240 130 210 150 200Z" fill="#333333"/> <!-- Horse body -->
+    
+    <path d="M160 170C160 170 170 150 180 140C190 130 200 130 210 140C220 150 220 160 210 170C200 180 190 180 180 170C170 160 160 170 160 170Z" fill="#FFFFFF"/> <!-- Skull -->
+    <circle cx="190" cy="155" r="5" fill="#000000"/> <!-- Eye socket -->
+    <circle cx="205" cy="155" r="5" fill="#000000"/> <!-- Eye socket -->
+    <path d="M190 165L210 165" stroke="#000000" stroke-width="2"/> <!-- Nose -->
+    <path d="M185 170C185 170 200 180 215 170" stroke="#000000" stroke-width="2"/> <!-- Teeth -->
+    
+    <!-- Scythe -->
+    <line x1="220" y1="150" x2="270" y2="250" stroke="#D4AF37" stroke-width="3"/>
+    <path d="M220 150C220 150 200 140 190 120C180 100 200 90 200 90" stroke="#D4AF37" stroke-width="3" fill="none"/>
+    
+    <!-- Fallen figures -->
+    <path d="M70 350C70 350 90 330 100 350L70 350Z" fill="#FFD3B5"/>
+    <circle cx="80" cy="325" r="10" fill="#FFD3B5"/>
+    
+    <path d="M130 330C130 330 150 340 140 360L130 330Z" fill="#8B5CF6"/>
+    <circle cx="135" cy="320" r="10" fill="#FFD3B5"/>
+    
+    <path d="M230 350C230 350 250 330 260 350L230 350Z" fill="#D946EF"/>
+    <circle cx="245" cy="325" r="10" fill="#FFD3B5"/>
+  </g>
+  
+  <!-- Card title -->
+  <rect x="20" y="390" width="260" height="40" rx="5" fill="#121640" fill-opacity="0.7"/>
+  <text x="150" y="415" font-family="serif" font-size="18" text-anchor="middle" fill="#D4AF37">Death</text>
+  
+  <!-- Card number -->
+  <circle cx="30" cy="30" r="15" fill="#121640"/>
+  <text x="30" y="35" font-family="serif" font-size="18" text-anchor="middle" fill="#D4AF37">XIII</text>
+</svg>

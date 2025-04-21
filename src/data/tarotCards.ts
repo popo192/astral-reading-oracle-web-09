@@ -17,7 +17,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 0,
     name: "The Fool",
-    image: "/tarot/fool.jpg", 
+    image: "/tarot/cards/fool.svg", 
     meaning: {
       upright: "New beginnings, innocence, spontaneity",
       reversed: false,
@@ -30,7 +30,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 1,
     name: "The Magician",
-    image: "/tarot/magician.jpg",
+    image: "/tarot/cards/magician.svg",
     meaning: {
       upright: "Manifestation, resourcefulness, power, inspired action",
       reversed: false,
@@ -43,7 +43,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 2,
     name: "The High Priestess",
-    image: "/tarot/high-priestess.jpg",
+    image: "/tarot/cards/high-priestess.svg",
     meaning: {
       upright: "Intuition, sacred knowledge, divine feminine",
       reversed: false,
@@ -56,7 +56,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 3,
     name: "The Empress",
-    image: "/tarot/empress.jpg",
+    image: "/tarot/cards/empress.svg",
     meaning: {
       upright: "Femininity, beauty, nature, nurturing, abundance",
       reversed: false,
@@ -69,7 +69,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 4,
     name: "The Emperor",
-    image: "/tarot/emperor.jpg",
+    image: "/tarot/cards/emperor.svg",
     meaning: {
       upright: "Authority, structure, control, fatherhood",
       reversed: false,
@@ -82,7 +82,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 5,
     name: "The Hierophant",
-    image: "/tarot/hierophant.jpg",
+    image: "/tarot/cards/hierophant.svg",
     meaning: {
       upright: "Tradition, conformity, spiritual wisdom, religious beliefs",
       reversed: false,
@@ -95,7 +95,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 6,
     name: "The Lovers",
-    image: "/tarot/lovers.jpg",
+    image: "/tarot/cards/lovers.svg",
     meaning: {
       upright: "Love, harmony, alignment, choices",
       reversed: false,
@@ -160,7 +160,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 11,
     name: "Justice",
-    image: "/tarot/justice.jpg", 
+    image: "/tarot/cards/justice.svg", 
     meaning: {
       upright: "Justice, fairness, truth, cause and effect",
       reversed: false,
@@ -173,7 +173,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 12,
     name: "The Hanged Man",
-    image: "/tarot/hanged-man.jpg", 
+    image: "/tarot/cards/hanged-man.svg", 
     meaning: {
       upright: "Surrender, new perspective, enlightenment",
       reversed: false,
@@ -186,7 +186,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 13,
     name: "Death",
-    image: "/tarot/death.jpg", 
+    image: "/tarot/cards/death.svg", 
     meaning: {
       upright: "Endings, change, transformation, transition",
       reversed: false,
@@ -199,7 +199,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 14,
     name: "Temperance",
-    image: "/tarot/temperance.jpg", 
+    image: "/tarot/cards/temperance.svg", 
     meaning: {
       upright: "Balance, moderation, patience, purpose",
       reversed: false,
@@ -238,7 +238,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 17,
     name: "The Star",
-    image: "/tarot/star.jpg", 
+    image: "/tarot/cards/star.svg", 
     meaning: {
       upright: "Hope, faith, inspiration, generosity",
       reversed: false,
@@ -251,7 +251,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 18,
     name: "The Moon",
-    image: "/tarot/moon.jpg", 
+    image: "/tarot/cards/moon.svg", 
     meaning: {
       upright: "Illusion, fear, anxiety, subconscious",
       reversed: false,
@@ -264,7 +264,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 19,
     name: "The Sun",
-    image: "/tarot/sun.jpg", 
+    image: "/tarot/cards/sun.svg", 
     meaning: {
       upright: "Success, joy, celebration, positivity",
       reversed: false,
@@ -277,7 +277,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 20,
     name: "Judgement",
-    image: "/tarot/judgement.jpg", 
+    image: "/tarot/cards/judgement.svg", 
     meaning: {
       upright: "Rebirth, inner calling, absolution",
       reversed: false,
@@ -290,7 +290,7 @@ export const tarotCards: TarotCard[] = [
   {
     id: 21,
     name: "The World",
-    image: "/tarot/world.jpg", 
+    image: "/tarot/cards/world.svg", 
     meaning: {
       upright: "Completion, achievement, fulfillment, accomplishment",
       reversed: false,

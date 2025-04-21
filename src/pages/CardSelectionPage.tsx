@@ -135,7 +135,7 @@ const CardSelectionPage = () => {
     if (isMobile || selectionComplete) return null;
     
     return (
-      <div className="relative h-[400px] w-full mt-8 mb-12 overflow-visible">
+      <div className="relative h-[400px] w-full mt-0 mb-8 overflow-visible">
         <div className="absolute w-full h-full flex items-center justify-center">
           {displayedCards.map((card, index) => {
             // Calculate fan position
@@ -258,28 +258,30 @@ const CardSelectionPage = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-4">
-          <Button 
-            onClick={shuffleCards}
-            disabled={isShuffling || selectionComplete}
-            className="bg-mystical-purple hover:bg-mystical-purple-dark text-white w-full sm:w-auto"
-          >
-            <Shuffle className="mr-2 h-4 w-4" />
-            Shuffle Deck
-          </Button>
+          {/* Hide Shuffle button after first card selection */}
+          {tarotContext.selectedCards.length === 0 && (
+            <Button 
+              onClick={shuffleCards}
+              disabled={isShuffling || selectionComplete}
+              className="button-magical bg-mystical-purple hover:bg-mystical-purple-dark text-white w-full sm:w-auto"
+            >
+              <Shuffle className="mr-2 h-4 w-4" />
+              Shuffle Deck
+              <span></span><span></span><span></span>
+            </Button>
+          )}
           
-          <Button 
-            onClick={handleGetReading}
-            className="bg-mystical-gold hover:bg-mystical-gold/80 text-mystical-charcoal w-full sm:w-auto"
-          >
-            Get Reading
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-        
-        <div className="flex items-center justify-center mt-4 text-sm">
-          <div className="bg-mystical-purple/30 px-3 py-1 rounded-full text-white/80">
-            Selected: <span className="text-mystical-gold font-medium">{tarotContext.selectedCards.length}</span>/{readingType === 'three-card' ? '3' : '1'}
-          </div>
+          {/* Only show Get Reading button after all required cards are selected */}
+          {selectionComplete && (
+            <Button 
+              onClick={handleGetReading}
+              className="button-magical bg-mystical-gold hover:bg-mystical-gold/80 text-mystical-charcoal w-full sm:w-auto"
+            >
+              Get Reading
+              <ArrowRight className="ml-2 h-4 w-4" />
+              <span></span><span></span><span></span>
+            </Button>
+          )}
         </div>
       </div>
 

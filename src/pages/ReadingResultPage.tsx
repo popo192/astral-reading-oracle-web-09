@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -106,7 +107,7 @@ const ReadingResultPage = () => {
           
           return (
             <div key={index} className="w-full animate-fade-in">
-              <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
+              <div className="flex flex-col md:flex-row gap-6 items-start">
                 <div className="w-64 shrink-0">
                   <TarotCard
                     id={cardDetails.id}

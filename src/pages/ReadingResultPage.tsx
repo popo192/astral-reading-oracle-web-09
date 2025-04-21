@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -93,14 +92,11 @@ const ReadingResultPage = () => {
         <h1 className="font-serif text-3xl font-bold mb-4 bg-gradient-to-r from-white to-mystical-purple-light bg-clip-text text-transparent">
           Your {readingType === 'three-card' ? 'Past-Present-Future' : 'Single Card'} Reading
         </h1>
-        {/* Remove the message for single card reading when card is revealed */}
-        {!(readingType === 'single-card' && revealedCards[0]) && (
-          <p className="text-white/70 max-w-2xl mx-auto">
-            {readingType === 'three-card' 
-              ? 'This spread reveals the journey from your past influences through present circumstances to future possibilities.' 
-              : 'This card represents the key energy influencing your current situation.'}
-          </p>
-        )}
+        <p className="text-white/70 max-w-2xl mx-auto">
+          {readingType === 'three-card' 
+            ? 'This spread reveals the journey from your past influences through present circumstances to future possibilities.' 
+            : 'This card represents the key energy influencing your current situation.'}
+        </p>
       </div>
 
       <div className="flex flex-col gap-12 mb-12">
@@ -110,7 +106,7 @@ const ReadingResultPage = () => {
           
           return (
             <div key={index} className="w-full animate-fade-in">
-              <div className="flex flex-col md:flex-row gap-6">
+              <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
                 <div className="w-64 shrink-0">
                   <TarotCard
                     id={cardDetails.id}

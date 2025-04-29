@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
 import { useTarot } from '@/contexts/TarotContext';
 import TarotCard from '@/components/TarotCard';
-import { Card, CardContent } from '@/components/ui/card';
 import { tarotCards } from '@/data/tarotCards';
 
 const ReadingResultPage = () => {
@@ -51,7 +50,6 @@ const ReadingResultPage = () => {
     navigate('/');
   };
   
-  // Helper functions
   const getPositionLabel = (index: number) => {
     if (readingType === 'three-card') {
       return ['past', 'present', 'future'][index];
@@ -74,88 +72,58 @@ const ReadingResultPage = () => {
     return card.meaning.description;
   };
 
-  // Generate summary for the entire reading
-  const getReadingSummary = () => {
-    if (readingType !== 'three-card' || !tarotContext.selectedCards.length) return '';
-
-    const cards = tarotContext.selectedCards.map((card, index) => {
-      const details = getCardDetails(card.id);
-      const position = getPositionLabel(index);
-      return `${details.name} in the ${position}`;
-    }).join(', ');
-
-    return `Your reading reveals ${cards}. This spread suggests a journey from your past experiences through your current situation and into potential future developments. Consider how these energies flow and influence each other.`;
-  };
-
   return (
-    <div className="container max-w-4xl mx-auto px-4 py-8">
-      <div className="text-center mb-8 animate-fade-in">
+    <div className="container mx-auto px-4 py-8">
+      <div className="text-center mb-12 animate-fade-in">
         <h1 className="font-serif text-3xl font-bold mb-4 bg-gradient-to-r from-white to-mystical-purple-light bg-clip-text text-transparent">
           Your {readingType === 'three-card' ? 'Past-Present-Future' : 'Single Card'} Reading
         </h1>
         <p className="text-white/70 max-w-2xl mx-auto">
           {readingType === 'three-card' 
-            ? 'This spread reveals the journey from your past influences through present circumstances to future possibilities.' 
+            ? 'These cards represent the influences of your past, the energies of your present, and potential future outcomes.' 
             : 'This card represents the key energy influencing your current situation.'}
         </p>
       </div>
 
-      <div className="flex flex-col gap-12 mb-12">
+      <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6 md:gap-12 mb-12">
         {tarotContext.selectedCards.map((card, index) => {
           const cardDetails = getCardDetails(card.id);
           const position = getPositionLabel(index);
           
           return (
-            <div key={index} className="w-full animate-fade-in">
-              <div className="flex flex-col md:flex-row gap-6 items-start">
-                <div className="w-64 shrink-0">
-                  <TarotCard
-                    id={cardDetails.id}
-                    name={cardDetails.name}
-                    image={cardDetails.image}
-                    isRevealed={revealedCards[index]}
-                    position={position as any}
-                  />
-                </div>
-                
-                {revealedCards[index] && (
-                  <Card className="flex-1 bg-mystical-purple-dark/50 border-mystical-purple-light/20">
-                    <CardContent className="pt-6">
-                      <h3 className="font-serif text-2xl text-mystical-gold mb-3">
-                        {position.charAt(0).toUpperCase() + position.slice(1)}: {cardDetails.name}
-                      </h3>
-                      <p className="text-white/80 font-medium mb-3">{cardDetails.meaning.upright}</p>
-                      <p className="text-white/70">
-                        {getPositionalMeaning(cardDetails, position)}
-                      </p>
-                    </CardContent>
-                  </Card>
-                )}
+            <div key={index} className="w-full md:w-64 animate-fade-in">
+              <div className="mb-8">
+                <TarotCard
+                  id={cardDetails.id}
+                  name={cardDetails.name}
+                  image={cardDetails.image}
+                  isRevealed={revealedCards[index]}
+                  position={position as any}
+                  className="mx-auto"
+                />
               </div>
+              
+              {revealedCards[index] && (
+                <div className="text-center animate-fade-in">
+                  <h3 className="font-serif text-xl text-mystical-gold mb-2">{cardDetails.name}</h3>
+                  <p className="text-sm text-white/80 font-medium mb-3">{cardDetails.meaning.upright}</p>
+                  <p className="text-sm text-white/70">
+                    {getPositionalMeaning(cardDetails, position)}
+                  </p>
+                </div>
+              )}
             </div>
           );
         })}
       </div>
-
-      {readingType === 'three-card' && revealedCards.every(card => card) && (
-        <Card className="mb-12 bg-mystical-purple-dark/30 border-mystical-gold/20">
-          <CardContent className="pt-6">
-            <h2 className="font-serif text-2xl text-mystical-gold mb-4">Reading Summary</h2>
-            <p className="text-white/80">{getReadingSummary()}</p>
-          </CardContent>
-        </Card>
-      )}
       
       <div className="text-center">
         <Button 
           onClick={handleNewReading} 
-          className="bg-mystical-gold hover:bg-mystical-gold/80 text-mystical-charcoal button-magical"
+          className="bg-mystical-gold hover:bg-mystical-gold/80 text-mystical-charcoal"
         >
           <RefreshCw className="mr-2 h-4 w-4" />
-          Get Another Reading
-          <span></span>
-          <span></span>
-          <span></span>
+          Start a New Reading
         </Button>
       </div>
     </div>
